@@ -85,7 +85,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             else:
-                try: # this can be removed if there wont be any new pages # this makes some security holes if wont be handled properly
+                try: # this can be removed if there wont be any new pages # this makes some security holes if wont be handled properly1
                     with open(DIR + self.path, 'rb') as f:
                         content = f.read()
                 except FileNotFoundError:
