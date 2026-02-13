@@ -2,6 +2,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from argon2.exceptions import VerifyMismatchError
 from argon2.exceptions import InvalidHashError
 from argon2 import PasswordHasher
+from http import cookies
+import logging
 import subprocess, threading, sys, json, os
 from socketserver import ThreadingMixIn
 
@@ -29,6 +31,11 @@ def verbose(text, verbose_value=1): # -vv should be using only for debbuging bec
         print(text)
     else:
         return
+
+
+verbose(DIR, 2)
+verbose(BASE_DIR, 2)
+verbose(BASE_DIR_HTTP, 2)
 
 
 def passCheck(username, password):
@@ -61,31 +68,31 @@ class Handler(BaseHTTPRequestHandler):
                 self.path = '/404'
 
             if '..' in self.path:
-                self.send_response(403)
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b'Forbidden')
+                self.wfile.write(b'Not found')
                 return
             
             if self.path == '/LICENSE':
-                self.send_response(403)
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b'Forbidden')
+                self.wfile.write(b'Not found')
                 return
             
-            if self.path.startswith('/.git') == '/.git/HEAD':
-                self.send_response(403)
+            if self.path.startswith('/.git/'):
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b'Forbidden')
+                self.wfile.write(b'Not found')
                 return
 
             if self.path.startswith('/other'):
-                self.send_response(403)
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b'Forbidden')
+                self.wfile.write(b'Not found')
                 return
 
             else:
-                try: # this can be removed if there wont be any new pages # this makes some security holes if wont be handled properly1
+                try: # this can be removed if there wont be any new pages # this makes some security holes if wont be handled properly
                     with open(DIR + self.path, 'rb') as f:
                         content = f.read()
                 except FileNotFoundError:
@@ -95,9 +102,9 @@ class Handler(BaseHTTPRequestHandler):
                     return
         except(IsADirectoryError):
             verbose(f'{self.client_address[0]} tried to access directory', 1)
-            self.send_response(403)
+            self.send_response(404)
             self.end_headers()
-            self.wfile.write(b'Forbidden')
+            self.wfile.write(b'Not found')
             return
         except Exception as e:
             self.send_response(500)
@@ -124,7 +131,7 @@ class Handler(BaseHTTPRequestHandler):
                     data = json.loads(post_body)
                     verbose(f'{data}', 2)
                 except json.JSONDecodeError:
-                    self.send_response(400, 'Invalid JSON') # 
+                    self.send_response(400, 'Invalid JSON')
                     self.end_headers()
                     return
                 

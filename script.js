@@ -5,7 +5,7 @@ let inp_pass_id = document.getElementById('inp_pass_id')
 send_btn.addEventListener('click', function(event) {
     let password_1 = inp_pass_id.value
     let user_name = inp_name.value
-    console.log(password_1, user_name)
+    // console.log(password_1, user_name)
 
     let data = {"username": user_name, "password": password_1};
 
