@@ -1,0 +1,7 @@
+{
+    "username": {
+        "id": 0,
+        "hash": "$argon2id$v=19$m=65536,t=3,p=4$Fhd7NSc6DpTtPRxIFZADCA$o8Tt3Y/bWlLmKnZFXNKq9Bgnz90EohLO/Dk1DZOwCAk",
+        "email": "mail@example.com"
+    }
+}
