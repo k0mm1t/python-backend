@@ -10,7 +10,7 @@ for user in all_users:
     print(user)
 
 # Get specific columns
-cursor.execute("SELECT user, email FROM users WHERE password > ?", (25,))
+cursor.execute("SELECT username, email FROM users WHERE password > ?", (25,))
 results = cursor.fetchall()
 
 conn.close()
